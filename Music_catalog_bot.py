@@ -2,7 +2,6 @@ import telebot
 from telebot import types
 import sqlite3
 
-# Создаем экземпляр бота (ТОЛЬКО ОДИН РАЗ!)
 bot = telebot.TeleBot('7953999675:AAGfdcIFOQ51Li-4ioOvQwjNLgpa_bF-6yg')
 
 # Класс для представления музыкального произведения
