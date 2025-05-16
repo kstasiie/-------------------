@@ -28,17 +28,17 @@ class Playlist:
 
 # Главный класс бота
 class MusicCatalogBot:
-    def __init__(self, bot, db_file):  # Передаем экземпляр telebot.TeleBot в конструктор
-        self.bot = bot  # Сохраняем экземпляр bot
-        self.db_file = db_file  # Сохраняем имя файла БД
+    def __init__(self, bot, db_file):  
+        self.bot = bot  
+        self.db_file = db_file  
         self.db_connection = None
         self.db_cursor = None
         try:
             self.connect_db()
         except Exception as e:
             print(f"Ошибка при инициализации бота: {e}")
-            exit()  # Важно: останавливаем выполнение, если не удалось подключиться к БД
-        self.setup_handlers()  # Устанавливаем обработчики
+            exit()  
+        self.setup_handlers()  
 
     def connect_db(self):
         """Подключается к базе данных."""
@@ -48,38 +48,38 @@ class MusicCatalogBot:
             print(f"Подключено к базе данных: {self.db_file}")
         except sqlite3.Error as e:
             print(f"Ошибка подключения к базе данных: {e}")
-            raise  # Важно: пробрасываем исключение, чтобы сообщить о проблеме
+            raise  
 
     def setup_handlers(self):
         """Устанавливает обработчики команд."""
         @self.bot.message_handler(commands=['start'])
         def handle_start(message):
-            self.handle_start_command(message)  # Вызываем метод класса
+            self.handle_start_command(message)  
 
         @self.bot.message_handler(commands=['help'])
         def handle_help(message):
-            self.handle_help_command(message)  # Вызываем метод класса
+            self.handle_help_command(message)  
 
         @self.bot.message_handler(commands=['search'])
         def handle_search(message):
-            self.handle_search_command(message)  # Вызываем метод класса
+            self.handle_search_command(message) 
 
         # Обработчик для нажатия на кнопку "Поиск"
         @self.bot.message_handler(func=lambda message: message.text == "Поиск")
         def handle_search_button(message):
             """Обрабатывает нажатие на кнопку "Поиск"."""
-            self.handle_search_command(message)  # Вызываем команду поиска
+            self.handle_search_command(message)  
 
         @self.bot.message_handler(func=lambda message: message.text == "Редактировать плейлист")
         def handle_playlist_button(message):
             """Обрабатывает нажатие на кнопку "Редактировать плейлист"."""
-            # Здесь нужно добавить код для редактирования плейлиста.
+           
             self.send_message(message.chat.id, "Функция редактирования плейлиста пока не реализована.")
 
         @self.bot.message_handler(func=lambda message: message.text == "Помощь")
         def handle_help_button(message):
             """Обрабатывает нажатие на кнопку "Помощь"."""
-            self.handle_help_command(message)  # Вызываем команду help
+            self.handle_help_command(message)  
 
 
     def add_song(self, title, artist, genre, file_path):
@@ -114,14 +114,14 @@ class MusicCatalogBot:
     def send_message(self, chat_id, text, reply_markup=None):
         """Отправляет текстовое сообщение пользователю."""
         try:
-            self.bot.send_message(chat_id, text, reply_markup=reply_markup)  # reply_markup - для передачи кнопок
+            self.bot.send_message(chat_id, text, reply_markup=reply_markup)  
         except Exception as e:
             print(f"Ошибка при отправке сообщения: {e}")
 
     def handle_search_command(self, message):
         """Обрабатывает команду /search."""
         try:
-            if len(message.text.split(' ', 1)) > 1:  # Проверяем, есть ли запрос после /search
+            if len(message.text.split(' ', 1)) > 1:  
                 query = message.text.split(' ', 1)[1]
                 songs = self.search_songs(query)
                 if songs:
@@ -146,15 +146,15 @@ class MusicCatalogBot:
         /help - Получить справку
         """
         # Создаем клавиатуру
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)  # resize_keyboard=True - для адаптации размера кнопок
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)  
         # Создаем кнопки
         search_button = types.KeyboardButton("Поиск")
         playlist_button = types.KeyboardButton("Редактировать плейлист")
         help_button = types.KeyboardButton("Помощь")
 
         # Добавляем кнопки в клавиатуру
-        markup.row(search_button)  # Кнопки в ряд
-        markup.row(playlist_button, help_button)  # Кнопки в ряд
+        markup.row(search_button)  
+        markup.row(playlist_button, help_button)
 
         self.send_message(message.chat.id, help_message, reply_markup=markup)
 
