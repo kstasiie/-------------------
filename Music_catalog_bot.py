@@ -123,7 +123,7 @@ class MusicCatalogBot:
         help_message = """
         Доступные команды:
         /start - Начать работу с ботом
-        /help - Получить справку
+        /help - Получить руководство пользователя
         /search <запрос> - Поиск музыки по названию, исполнителю или жанру
         """
         self.send_message(message.chat.id, help_message)
